@@ -68,7 +68,7 @@ public class StudentController : Controller
         _viewEngine = viewEngine;
     }
 
-    [HttpGet("generate-pdf/{studentId}")]
+    [HttpGet("generate-reportStudent/{studentId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GeneratePDF(int studentId)
@@ -82,6 +82,7 @@ public class StudentController : Controller
 
             try
             {
+                //faltaría acá pasarle el estudiante a la función
                 var html = GenerateHtml();
                 var pdfBytes = _pdfService.GeneratePdf(html);
                 return File(pdfBytes, "application/pdf", "informe.pdf");
@@ -96,13 +97,23 @@ public class StudentController : Controller
     {
         var model = new StudentDto
         {
-            NameStudent = "Nombre del estudiante",
+            NameStudent = "Lisa",
             StudentIdentification = "12345",
-            Profile = "ruta/de/imagen.jpg",
-            Notes = new List<NotesDto>
+            Profile = "https://static.wikia.nocookie.net/doblaje/images/5/59/Lisa.png/revision/latest?cb=20131124215512&path-prefix=es",
+            Subjects = new List<SubjectDto>
             {
-                new NotesDto { Subject = "Matemáticas", Note = 3.0 },
-                new NotesDto { Subject = "Ciencias", Note = 4.6 },
+                new SubjectDto { Subject = "Matemáticas", 
+                                Notes = new List<NotesDto>{
+                                    new NotesDto { Note1 = 4, Note2 = 5, Note3 = 5, Average = 4.6}
+                                } },
+                new SubjectDto { Subject = "Ciencias", 
+                                Notes = new List<NotesDto>{
+                                    new NotesDto { Note1 = 5, Note2 = 5, Note3 = 5, Average = 5}
+                                } },
+                new SubjectDto { Subject = "Música", 
+                                Notes = new List<NotesDto>{
+                                    new NotesDto { Note1 = 5, Note2 = 5, Note3 = 5, Average = 5}
+                                } },
             }
         };
 

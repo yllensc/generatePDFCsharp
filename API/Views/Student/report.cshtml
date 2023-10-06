@@ -1,35 +1,93 @@
 @model API.Dtos.StudentDto
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="styles.css">
     <title>Reporte de Notas</title>
-</head>
-<body>
+    <style>
+      /* Estilos generales */
+      body {
+        font-family: Arial, sans-serif;
+        color: #993e3e;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Estilos del encabezado */
+      header {
+        text-align: center;
+        padding: 20px;
+      }
+
+      header img {
+        max-width: 100px;
+        height: auto;
+        border: 6px solid #993e3e;
+      }
+
+      header h1 {
+        font-size: 24px;
+        margin: 10px 0;
+        color: #993e3e;
+      }
+
+      /* Estilos de la tabla */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      table th,
+      table td {
+        border: 1px solid #28295a;
+        padding: 8px;
+        text-align: left;
+      }
+
+      /* Estilos de la tabla - Cabecera */
+      table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+
+      /* Estilos de la tabla - Filas impares */
+      table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+    </style>
+  </head>
+  <body>
     <header>
-        <img src="@Model.Profile" alt="Imagen del estudiante" />
-        <h1>@Model.NameStudent</h1>
-        <p>Código de estudiante: @Model.StudentIdentification</p>
+      <img src="@Model.Profile" alt="Imagen del estudiante" />
+      <h1>@Model.NameStudent</h1>
+      <p>Código de estudiante: @Model.StudentIdentification</p>
     </header>
     <main>
-    <table>
+      <table>
         <thead>
-            <tr>
-                <th>Materia</th>
-                <th>Nota</th>
-            </tr>
+          <tr>
+            <th>Materia</th>
+            <th>Periodo 1</th>
+            <th>Periodo 2</th>
+            <th>Periodo 3</th>
+            <th>Promedio</th>
+          </tr>
         </thead>
         <tbody>
-            @foreach (var n in Model.Notes)
-            {
-                <tr>
-                    <td>@n.Subject</td>
-                    <td>@n.Note</td>
-                </tr>
-            }
+                @foreach (var subject in Model.Subjects)
+                {
+              <tr>
+                <td>@subject.Subject</td>
+                <td>@string.Join(", ", subject.Notes.Select(note => note.Note1))</td>
+                <td>@string.Join(", ", subject.Notes.Select(note => note.Note2))</td>
+                <td>@string.Join(", ", subject.Notes.Select(note => note.Note3))</td>
+                <td>@string.Join(", ", subject.Notes.Select(note => note.Average))</td>
+              </tr>
+                }
         </tbody>
-    </table>
-</main>
-</body>
+      </table>
+    </main>
+  </body>
 </html>
+
