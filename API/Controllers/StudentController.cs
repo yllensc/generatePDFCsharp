@@ -46,6 +46,7 @@ namespace API.Controllers
 using System.IO;
 using API.Dtos;
 using API.Services;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -60,65 +61,66 @@ public class StudentController : Controller
     private readonly ICompositeViewEngine _viewEngine;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPdfService _pdfService;
+    private readonly IMapper _mapper;
 
-    public StudentController(ICompositeViewEngine viewEngine, IUnitOfWork unitOfWork, IPdfService pdfService)
+    public StudentController(ICompositeViewEngine viewEngine, IUnitOfWork unitOfWork, IPdfService pdfService, IMapper mapper)
     {
+        _mapper = mapper;
         _pdfService = pdfService;
         _unitOfWork = unitOfWork;
         _viewEngine = viewEngine;
     }
 
     [HttpGet("generate-reportStudent/{studentId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GeneratePDF(int studentId)
-        {
-            var student = await _unitOfWork.Students.GetByIdAsync(studentId);
-
-            if (student == null)
-            {
-                return BadRequest("Estudiante no encontrado");
-            }
-
-            try
-            {
-                //faltaría acá pasarle el estudiante a la función
-                var html = GenerateHtml();
-                var pdfBytes = _pdfService.GeneratePdf(html);
-                return File(pdfBytes, "application/pdf", "informe.pdf");
-            }
-            catch (Exception ex)
-            {
-                // Maneja errores aquí.
-                return BadRequest($"Error al generar el informe: {ex.Message}");
-            }
-        }
-    public string GenerateHtml()
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GeneratePDF(int studentId)
     {
-        var model = new StudentDto
+        var student = await _unitOfWork.Students.GetByIdAsync(studentId);
+
+        if (student == null)
         {
-            NameStudent = "Lisa",
-            StudentIdentification = "12345",
-            Profile = "https://static.wikia.nocookie.net/doblaje/images/5/59/Lisa.png/revision/latest?cb=20131124215512&path-prefix=es",
-            Subjects = new List<SubjectDto>
+            return BadRequest("Estudiante no encontrado");
+        }
+
+        try
+        {
+            //esta variable la quitamos cuando ya tengamos daticos jiji, con el id
+            var model = new StudentDto
             {
-                new SubjectDto { Subject = "Matemáticas", 
+                NameStudent = "Lisa",
+                StudentIdentification = "12345",
+                Profile = "https://static.wikia.nocookie.net/doblaje/images/5/59/Lisa.png/revision/latest?cb=20131124215512&path-prefix=es",
+                Subjects = new List<SubjectDto>
+            {
+                new SubjectDto { Subject = "Matemáticas",
                                 Notes = new List<NotesDto>{
                                     new NotesDto { Note1 = 4, Note2 = 5, Note3 = 5, Average = 4.6}
                                 } },
-                new SubjectDto { Subject = "Ciencias", 
+                new SubjectDto { Subject = "Ciencias",
                                 Notes = new List<NotesDto>{
                                     new NotesDto { Note1 = 5, Note2 = 5, Note3 = 5, Average = 5}
                                 } },
-                new SubjectDto { Subject = "Música", 
+                new SubjectDto { Subject = "Música",
                                 Notes = new List<NotesDto>{
                                     new NotesDto { Note1 = 5, Note2 = 5, Note3 = 5, Average = 5}
                                 } },
             }
-        };
-
-
-
+            };
+            var studentData = _mapper.Map<StudentDto>(student);
+            //faltaría acá pasarle el estudiante a la función, de momento el quemado:
+            var html = GenerateHtml(model);
+            var pdfBytes = _pdfService.GeneratePdf(html);
+            return File(pdfBytes, "application/pdf", "informe.pdf");
+        }
+        catch (Exception ex)
+        {
+            // Maneja errores aquí.
+            return BadRequest($"Error al generar el informe: {ex.Message}");
+        }
+    }
+    public string GenerateHtml(StudentDto student)
+    {
         // Crea una instancia de la clase StringWriter para capturar la salida HTML.
         var sw = new StringWriter();
 
@@ -130,7 +132,7 @@ public class StudentController : Controller
             ActionDescriptor = new ActionDescriptor(),
             ViewData = new ViewDataDictionary<StudentDto>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
             {
-                Model = model // Asigna el modelo a la vista.
+                Model = student // Asigna el modelo a la vista.
             },
             Writer = sw
         };

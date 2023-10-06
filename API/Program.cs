@@ -1,3 +1,4 @@
+using System.Reflection;
 using API.Extension;
 using Application.Repository;
 using DinkToPdf;
@@ -19,7 +20,7 @@ builder.Services.AddDbContext<GeneratorPDFDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
-
+builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 
 var app = builder.Build();
 
