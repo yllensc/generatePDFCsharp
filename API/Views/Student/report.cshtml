@@ -1,0 +1,35 @@
+@model API.Dtos.StudentDto
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="styles.css">
+    <title>Reporte de Notas</title>
+</head>
+<body>
+    <header>
+        <img src="@Model.Profile" alt="Imagen del estudiante" />
+        <h1>@Model.NameStudent</h1>
+        <p>Código de estudiante: @Model.StudentIdentification</p>
+    </header>
+    <main>
+    <table>
+        <thead>
+            <tr>
+                <th>Materia</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var n in Model.Notes)
+            {
+                <tr>
+                    <td>@n.Subject</td>
+                    <td>@n.Note</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
