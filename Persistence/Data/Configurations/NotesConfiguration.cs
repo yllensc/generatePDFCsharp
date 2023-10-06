@@ -14,7 +14,7 @@ public class NotesConfiguration : IEntityTypeConfiguration<Notes>
         .IsRequired();
         builder.Property(x=>x.Note3)
         .IsRequired();
-        builder.Property(x=>x.Avarage)
+        builder.Property(x=>x.Average)
         .IsRequired();
         
         builder.HasOne(x=>x.Student)

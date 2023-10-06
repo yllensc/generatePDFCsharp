@@ -15,7 +15,7 @@ namespace Domain.Entities
         public double Note1 { get; set; }
         public double Note2 { get; set; }
         public double Note3 { get; set; }
-        public double Avarage { get; set; }
+        public double Average { get; set; }
     }
 }
     
