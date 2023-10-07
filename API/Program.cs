@@ -30,6 +30,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+using (var scope = app.Services.CreateScope())
+{
+	var services = scope.ServiceProvider;
+	var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+	try
+	{
+		var context = services.GetRequiredService<GeneratorPDFDbContext>();
+		await context.Database.MigrateAsync();
+		await GeneratorPDFDbContextSeed.SeedAsync(context,loggerFactory);
+	}
+	catch (Exception ex)
+	{
+		var _logger = loggerFactory.CreateLogger<Program>();
+		_logger.LogError(ex, "Ocurrio un error durante la migracion");
+	}
+}
 
 app.UseHttpsRedirection();
 
