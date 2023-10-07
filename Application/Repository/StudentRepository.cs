@@ -27,6 +27,13 @@ namespace Application.Repository
                 .FirstOrDefaultAsync(p => p.Id == id);
 
         }
+        public override async Task<IEnumerable<Student>> GetAllAsync()
+        {
+            return await _context.Students
+                .Include(p => p.Notes).ThenInclude(p => p.Subject)
+                .ToListAsync();
+
+        }
         public async Task<string> GeneratePDFReport(Student student)
         {
             try

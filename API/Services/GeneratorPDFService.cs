@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Dtos;
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Domain.Interfaces;
@@ -37,5 +39,30 @@ namespace API.Services
 
             return _converter.Convert(pdf);
         }
+
+       public byte[] GeneratePdfs(List<string> htmlContents)
+        {
+            var pdfAllStudents = new HtmlToPdfDocument()
+            {   
+                GlobalSettings = new GlobalSettings
+                {
+                    PaperSize = PaperKind.A4,
+                    Orientation = Orientation.Portrait,
+                }
+            };
+
+            foreach(var htmlContent in htmlContents)
+            {
+                var objectSettings = new ObjectSettings
+                {
+                    PagesCount = true,
+                    HtmlContent = htmlContent,
+                };
+                pdfAllStudents.Objects.Add(objectSettings);
+            }
+
+            return _converter.Convert(pdfAllStudents);
+        }
+    
     }
 }
