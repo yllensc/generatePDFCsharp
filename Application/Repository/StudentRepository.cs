@@ -6,6 +6,7 @@ using Domain.Interfaces;
 using Persistence;
 using DinkToPdf;
 using DinkToPdf.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Repository
 {
@@ -18,7 +19,14 @@ namespace Application.Repository
         {
             _context = context;
         }
+        
+        public override async Task<Student> GetByIdAsync(int id)
+        {
+            return await _context.Students
+                .Include(p => p.Notes).ThenInclude(p => p.Subject)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
+        }
         public async Task<string> GeneratePDFReport(Student student)
         {
             try

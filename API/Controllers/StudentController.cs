@@ -70,7 +70,19 @@ public class StudentController : Controller
         _unitOfWork = unitOfWork;
         _viewEngine = viewEngine;
     }
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<StudentDto>> GetById(int id)
+    {
+        var student = await _unitOfWork.Students.GetByIdAsync(id);
+        if(student == null)
+        {
+            return BadRequest();
+        }
 
+        return _mapper.Map<StudentDto>(student);
+    }
     [HttpGet("generate-reportStudent/{studentId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -86,30 +98,10 @@ public class StudentController : Controller
         try
         {
             //esta variable la quitamos cuando ya tengamos daticos jiji, con el id
-            var model = new StudentDto
-            {
-                NameStudent = "Lisa",
-                StudentIdentification = "12345",
-                Profile = "https://static.wikia.nocookie.net/doblaje/images/5/59/Lisa.png/revision/latest?cb=20131124215512&path-prefix=es",
-                Subjects = new List<SubjectDto>
-            {
-                new SubjectDto { Subject = "Matemáticas",
-                                Notes = new List<NotesDto>{
-                                    new NotesDto { Note1 = 4, Note2 = 5, Note3 = 5, Average = 4.6}
-                                } },
-                new SubjectDto { Subject = "Ciencias",
-                                Notes = new List<NotesDto>{
-                                    new NotesDto { Note1 = 5, Note2 = 5, Note3 = 5, Average = 5}
-                                } },
-                new SubjectDto { Subject = "Música",
-                                Notes = new List<NotesDto>{
-                                    new NotesDto { Note1 = 5, Note2 = 5, Note3 = 5, Average = 5}
-                                } },
-            }
-            };
+            
             var studentData = _mapper.Map<StudentDto>(student);
             //faltaría acá pasarle el estudiante a la función, de momento el quemado:
-            var html = GenerateHtml(model);
+            var html = GenerateHtml(studentData);
             var pdfBytes = _pdfService.GeneratePdf(html);
             return File(pdfBytes, "application/pdf", "informe.pdf");
         }

@@ -17,6 +17,7 @@ public class MappingProfiles : Profile
         CreateMap<Student, StudentDto>()
             .ReverseMap();
         CreateMap<Notes, NotesDto>()
+            .ForMember(dest => dest.SubjectName, origen=> origen.MapFrom(origen => origen.Subject.NameSubject))
             .ReverseMap();
             
     }
