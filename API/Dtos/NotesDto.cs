@@ -8,6 +8,8 @@ namespace API.Dtos
     public class NotesDto
     {
         public int Id {get;set;}
+        public SubjectDto Subject { get; set; }
+        public string NameSubject { get; set; }
         public int IdSubject { get; set; }
         public double Note1 { get; set; }
         public double Note2 { get; set; }

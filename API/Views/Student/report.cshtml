@@ -75,14 +75,14 @@
           </tr>
         </thead>
         <tbody>
-                @foreach (var subject in Model.Subjects)
+                @foreach (var notes in Model.Notes)
                 {
               <tr>
-                <td>@subject.Subject</td>
-                <td>@string.Join(", ", subject.Notes.Select(note => note.Note1))</td>
-                <td>@string.Join(", ", subject.Notes.Select(note => note.Note2))</td>
-                <td>@string.Join(", ", subject.Notes.Select(note => note.Note3))</td>
-                <td>@string.Join(", ", subject.Notes.Select(note => note.Average))</td>
+                <td>@notes.NameSubject</td>
+                <td>@notes.Note1</td>
+                <td>@notes.Note2</td>
+                <td>@notes.Note3</td>
+                <td>@notes.Average</td>
               </tr>
                 }
         </tbody>
