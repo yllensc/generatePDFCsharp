@@ -19,7 +19,7 @@ public class MappingProfiles : Profile
         CreateMap<Subject, SubjectDto>()
             .ReverseMap();
         CreateMap<Notes, NotesDto>()
-        .ForMember(des => des.NameSubject, org => org.MapFrom(org => org.Subject.NameSubject))
+            .ForMember(dest => dest.SubjectName, origen=> origen.MapFrom(origen => origen.Subject.NameSubject))
             .ReverseMap();
     }
 

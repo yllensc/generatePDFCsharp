@@ -1,4 +1,7 @@
 @model API.Dtos.StudentDto
+@{
+    
+}
 <!DOCTYPE html>
 <html>
   <head>
@@ -78,11 +81,12 @@
                 @foreach (var notes in Model.Notes)
                 {
               <tr>
-                <td>@notes.NameSubject</td>
+                <td>@notes.SubjectName</td>
                 <td>@notes.Note1</td>
                 <td>@notes.Note2</td>
                 <td>@notes.Note3</td>
                 <td>@notes.Average</td>
+            
               </tr>
                 }
         </tbody>

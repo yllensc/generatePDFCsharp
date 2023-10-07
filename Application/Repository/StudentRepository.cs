@@ -19,12 +19,21 @@ namespace Application.Repository
         {
             _context = context;
         }
+        
         public override async Task<Student> GetByIdAsync(int id)
         {
-            return await this._context.Students.Include(s=>s.Notes)
-            .FirstOrDefaultAsync(s=>s.Id == id);
-        }
+            return await _context.Students
+                .Include(p => p.Notes).ThenInclude(p => p.Subject)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
+        }
+        public override async Task<IEnumerable<Student>> GetAllAsync()
+        {
+            return await _context.Students
+                .Include(p => p.Notes).ThenInclude(p => p.Subject)
+                .ToListAsync();
+
+        }
         public async Task<string> GeneratePDFReport(Student student)
         {
             try
