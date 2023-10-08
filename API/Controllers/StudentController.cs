@@ -178,7 +178,7 @@ public class StudentController : Controller
             //faltaría acá pasarle el estudiante a la función, de momento el quemado:
             var html = GenerateHtml2(studentsAveragesData);
             var pdfBytes = _pdfService.GeneratePdf(html);
-            return File(pdfBytes, "application/pdf", "informe.pdf");
+            return File(pdfBytes, "application/pdf", "informePromedios.pdf");
         }
         catch (Exception ex)
         {
