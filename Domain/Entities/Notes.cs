@@ -9,7 +9,6 @@ namespace Domain.Entities
     {
         public int IdSubject { get; set; }
         public Subject Subject { get; set; }
-        
         public int IdStudent { get; set; }
         public Student Student{ get; set; }
         public double Note1 { get; set; }

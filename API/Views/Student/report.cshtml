@@ -1,7 +1,4 @@
 @model API.Dtos.StudentDto
-@{
-    
-}
 <!DOCTYPE html>
 <html>
   <head>
@@ -64,31 +61,28 @@
     <header>
       <img src="@Model.Profile" alt="Imagen del estudiante" />
       <h1>@Model.NameStudent</h1>
-      <p>Código de estudiante: @Model.StudentIdentification</p>
+      <p>Student code: @Model.StudentIdentification</p>
     </header>
     <main>
       <table>
         <thead>
           <tr>
-            <th>Materia</th>
-            <th>Periodo 1</th>
-            <th>Periodo 2</th>
-            <th>Periodo 3</th>
-            <th>Promedio</th>
+            <th>Subject</th>
+            <th>Period 1</th>
+            <th>Period 2</th>
+            <th>Period 3</th>
+            <th>Average</th>
           </tr>
         </thead>
         <tbody>
                 @foreach (var notes in Model.Notes)
-                {
-              <tr>
+                {<tr>
                 <td>@notes.SubjectName</td>
                 <td>@notes.Note1</td>
                 <td>@notes.Note2</td>
                 <td>@notes.Note3</td>
                 <td>@notes.Average</td>
-            
-              </tr>
-                }
+              </tr>}
         </tbody>
       </table>
     </main>

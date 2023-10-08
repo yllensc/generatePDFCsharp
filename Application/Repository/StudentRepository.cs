@@ -13,13 +13,10 @@ namespace Application.Repository;
 public class StudentRepository : GenericRepository<Student>, IStudent
 {
     private readonly GeneratorPDFDbContext _context;
-
-
-    public StudentRepository(GeneratorPDFDbContext context) : base(context)
-    {
-        _context = context;
-    }
-    
+        public StudentRepository(GeneratorPDFDbContext context) : base(context)
+        {
+            _context = context;
+        }
     public override async Task<Student> GetByIdAsync(int id)
     {
         return await _context.Students
@@ -59,6 +56,5 @@ public class StudentRepository : GenericRepository<Student>, IStudent
         return dicAverage;
     }
 }
-        
 
 
