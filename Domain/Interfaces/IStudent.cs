@@ -7,5 +7,4 @@ using Domain.Entities;
 namespace Domain.Interfaces;
     public interface IStudent : IGenericRepository<Student>
     {
-        Task<string> GeneratePDFReport(Student student);
     }
