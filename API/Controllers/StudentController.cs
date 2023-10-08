@@ -188,5 +188,24 @@ public class StudentController : Controller
 
         return html;
     }
+
+    [HttpGet("best-averages")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetTotalAverages()
+    {
+        var students = await _unitOfWork.Students.GetBestAverages();
+        try
+        {            
+            //var studentsData = _mapper.Map<List<StudentAverageTotalDto>>(students);
+            return  Ok(students);
+        }
+        catch (Exception ex)
+        {
+            // Maneja errores aquí.
+            return BadRequest($"Error al generar el informe: {ex.Message}");
+        }
+
+    }
 }
 

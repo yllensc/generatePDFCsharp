@@ -13,4 +13,11 @@ namespace API.Dtos
         public string Profile {get; set;}
         public IEnumerable<NotesDto> Notes { get; set;}
     }
+
+     public class StudentAverageTotalDto
+    {
+        public string NameStudent { get; set; }
+        public string AverageTotal { get; set; }
+        
+    }
 }
