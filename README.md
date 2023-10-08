@@ -42,10 +42,14 @@ NetCore 7.0
 1. Informe en PDF del boletín de notas final de un estudiante<br>
    <b>Nota:</b> Reemplazar {id} por el id del estudiante.
    * ```http://localhost:5062/generate-reportStudent/{id} ```<br>
+   ![image](https://github.com/yllensc/generatePDFCsharp/assets/131481951/3510195b-506c-465e-9ec7-c01c0ee96140)
 3. Informe en PDF del boletín de notas de cada uno de los estudiantes<br>
     * ```http://localhost:5062/generate-reportStudents ```<br>
+    ![image](https://github.com/yllensc/generatePDFCsharp/assets/131481951/e098f72a-3c47-449e-933e-63e87e66e1d8)
 4. Informe en PDF de los 3 primeros estudiantes con mayor promedio de las notas por materia<br>
     * ```http://localhost:5062/generate-best-averages```<br>
+    ![image](https://github.com/yllensc/generatePDFCsharp/assets/131481951/92135cc8-6eff-4e77-8e6f-369c173cba96)
+
 
 ## Autores ✒️
 
