@@ -79,11 +79,9 @@ public class StudentController : Controller
     public async Task<IActionResult> GeneratePDFs()
     {
         var students = await _unitOfWork.Students.GetAllAsync();
-
         try
         {            
             var studentsData = _mapper.Map<List<StudentDto>>(students);
-            
             var htmlContents = new List<string>();
             foreach (var studentData in studentsData)
             {
@@ -91,7 +89,7 @@ public class StudentController : Controller
                 htmlContents.Add(html);
             }
             var pdfBytes = _pdfService.GeneratePdfs(htmlContents);
-            return File(pdfBytes, "application/pdf", "informe.pdf");
+            return File(pdfBytes, "application/pdf", "informes.pdf");
         }
         catch (Exception ex)
         {
