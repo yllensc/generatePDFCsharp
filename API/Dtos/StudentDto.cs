@@ -12,7 +12,7 @@ namespace API.Dtos
      public class StudentAverageTotalDto
     {
         public string NameStudent { get; set; }
-        public string AverageTotal { get; set; }
+        public double AverageTotal { get; set; }
         
     }
 }

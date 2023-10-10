@@ -1,0 +1,88 @@
+@model IEnumerable<API.Dtos.StudentAverageTotalDto>
+@{
+    
+}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Reporte de Notas</title>
+    <style>
+      /* Estilos generales */
+      body {
+        font-family: Arial, sans-serif;
+        color: #993e3e;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Estilos del encabezado */
+      header {
+        text-align: center;
+        padding: 20px;
+      }
+
+      header img {
+        max-width: 100px;
+        height: auto;
+        border: 6px solid #993e3e;
+      }
+
+      header h1 {
+        font-size: 24px;
+        margin: 10px 0;
+        color: #993e3e;
+      }
+
+      /* Estilos de la tabla */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      table th,
+      table td {
+        border: 1px solid #28295a;
+        padding: 8px;
+        text-align: left;
+      }
+
+      /* Estilos de la tabla - Cabecera */
+      table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+
+      /* Estilos de la tabla - Filas impares */
+      table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1> ✰✰✰ Best Averages ✰✰✰</h1>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Student </th>
+            <th>Total Average</th>
+          </tr>
+        </thead>
+        <tbody>
+                @foreach (var student in Model)
+                {
+                <tr>
+                  <td>@student.NameStudent</td>
+                  <td>@student.AverageTotal</td>
+                </tr>
+                }
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>
+

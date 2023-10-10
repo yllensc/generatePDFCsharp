@@ -79,11 +79,9 @@ public class StudentController : Controller
     public async Task<IActionResult> GeneratePDFs()
     {
         var students = await _unitOfWork.Students.GetAllAsync();
-
         try
         {            
             var studentsData = _mapper.Map<List<StudentDto>>(students);
-            
             var htmlContents = new List<string>();
             foreach (var studentData in studentsData)
             {
@@ -91,7 +89,7 @@ public class StudentController : Controller
                 htmlContents.Add(html);
             }
             var pdfBytes = _pdfService.GeneratePdfs(htmlContents);
-            return File(pdfBytes, "application/pdf", "informe.pdf");
+            return File(pdfBytes, "application/pdf", "informes.pdf");
         }
         catch (Exception ex)
         {
@@ -133,9 +131,19 @@ public class StudentController : Controller
     {
         var students = await _unitOfWork.Students.GetBestAverages();
         try
-        {            
-            //var studentsData = _mapper.Map<List<StudentAverageTotalDto>>(students);
-            return  Ok(students);
+        { 
+            List<StudentAverageTotalDto> studentsAverage = new();
+            foreach (var st in students)
+            {
+                studentsAverage.Add(new StudentAverageTotalDto
+                {
+                    NameStudent = st.Key,
+                    AverageTotal = st.Value
+                });
+            }
+            var studentsAveragesData = _mapper.Map<IEnumerable<StudentAverageTotalDto>>(studentsAverage);
+ 
+            return  Ok(studentsAveragesData);
         }
         catch (Exception ex)
         {
@@ -143,6 +151,78 @@ public class StudentController : Controller
             return BadRequest($"Error al generar el informe: {ex.Message}");
         }
 
+    }
+
+    [HttpGet("generate-best-averages")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetTotalAveragesPDF()
+    {
+        var students = await _unitOfWork.Students.GetBestAverages();
+        
+        try
+        {   
+            List<StudentAverageTotalDto> studentsAverage = new();
+            foreach (var st in students)
+            {
+                studentsAverage.Add(new StudentAverageTotalDto
+                {
+                    NameStudent = st.Key,
+                    AverageTotal = st.Value
+                });
+            }
+            var studentsAveragesData = _mapper.Map<IEnumerable<StudentAverageTotalDto>>(studentsAverage);
+ 
+            //faltaría acá pasarle el estudiante a la función, de momento el quemado:
+            var html = GenerateHtml2(studentsAveragesData);
+            var pdfBytes = _pdfService.GeneratePdf(html);
+            return File(pdfBytes, "application/pdf", "informePromedios.pdf");
+        }
+        catch (Exception ex)
+        {
+            // Maneja errores aquí.
+            return BadRequest($"Error al generar el informe: {ex.Message}");
+        }
+
+    }
+
+    public string GenerateHtml2(IEnumerable<StudentAverageTotalDto> students)
+    {
+        // Crea una instancia de la clase StringWriter para capturar la salida HTML.
+        var sw = new StringWriter();
+
+        // Configura el contexto de vista.
+        var viewContext = new ViewContext
+        {
+            HttpContext = HttpContext,
+            RouteData = RouteData,
+            ActionDescriptor = new ActionDescriptor(),
+            ViewData = new ViewDataDictionary<IEnumerable<StudentAverageTotalDto>>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
+            {
+                Model = students // Asigna el modelo a la vista.
+            },
+            Writer = sw
+        };
+
+        var viewName = "average";
+        var viewResult = _viewEngine.FindView(ControllerContext, viewName, false);
+
+
+        if (viewResult.View == null)
+        {
+            return null;
+        }
+
+        // Renderiza la vista en una cadena.
+        var viewEngineResult = viewResult.View.RenderAsync(viewContext);
+
+        // Espera a que se complete la renderización.
+        viewEngineResult.Wait();
+
+        // Obtiene la cadena HTML generada.
+        var html = sw.ToString();
+
+        return html;
     }
 }
 

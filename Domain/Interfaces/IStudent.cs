@@ -7,5 +7,6 @@ using Domain.Entities;
 namespace Domain.Interfaces;
     public interface IStudent : IGenericRepository<Student>
     {
-       Task<IEnumerable<object>>  GetBestAverages();
+       Task<Dictionary<string, double>> GetBestAverages();
     }
+
